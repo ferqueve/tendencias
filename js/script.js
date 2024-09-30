@@ -1,5 +1,5 @@
 let publicaciones = [];
-
+document.addEventListener('DOMContentLoaded',()=>{ 
         // Función para cargar los datos de la API
         async function cargarDatos() {
             try {
@@ -53,4 +53,5 @@ let publicaciones = [];
             } else {
                 resultsDiv.innerHTML = '<p class="alert alert-info">No se encontraron resultados para los criterios especificados.</p>';
             }
+        })
         });
