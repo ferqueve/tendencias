@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizador de Tendencias en Redes Sociales</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Analizador de Tendencias en Redes Sociales</h1>
+        <form id="trendForm">
+            <div class="mb-3">
+                <label for="hashtag" class="form-label"><i class="fas fa-hashtag"></i> Hashtag</label>
+                <input type="text" class="form-control" id="hashtag" required>
+            </div>
+            <div class="mb-3">
+                <label for="minLikes" class="form-label"><i class="fas fa-heart"></i> Mínimo de Likes</label>
+                <input type="number" class="form-control" id="minLikes" required>
+            </div>
+            <div class="mb-3">
+                <label for="startDate" class="form-label"><i class="fas fa-calendar"></i> Fecha de Inicio</label>
+                <input type="date" class="form-control" id="startDate" required>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Analizar Tendencias</button>
+        </form>
+        <div id="results" class="mt-4"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Datos de ejemplo (normalmente vendrían de una API o base de datos)
+        const publicaciones = [
+            { id: 1, texto: "Me encanta el nuevo iPhone #tecnología", likes: 50, fecha: '2024-09-15' },
+            { id: 2, texto: "La película de anoche fue increíble #cine", likes: 30, fecha: '2024-09-14' },
+            { id: 3, texto: "Nueva receta de pasta #comida", likes: 80, fecha: '2024-09-13' },
+            { id: 4, texto: "El nuevo juego es adictivo #tecnología", likes: 45, fecha: '2024-09-12' },
+            { id: 5, texto: "Hermosa puesta de sol hoy #naturaleza", likes: 100, fecha: '2024-09-11' }
+        ];
+
+        function analizarTendencias(hashtag, minLikes, fechaInicio) {
+            return publicaciones.filter(post => 
+                post.texto.toLowerCase().includes(hashtag.toLowerCase()) &&
+                post.likes >= minLikes &&
+                new Date(post.fecha) >= new Date(fechaInicio)
+            );
+        }
+
+        document.getElementById('trendForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const hashtag = document.getElementById('hashtag').value;
+            const minLikes = parseInt(document.getElementById('minLikes').value);
+            const startDate = document.getElementById('startDate').value;
+
+            const tendencias = analizarTendencias(hashtag, minLikes, startDate);
+
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+
+            if (tendencias.length > 0) {
+                const list = document.createElement('ul');
+                list.className = 'list-group';
+                tendencias.forEach(post => {
+                    const item = document.createElement('li');
+                    item.className = 'list-group-item';
+                    item.innerHTML = `
+                        <p>${post.texto}</p>
+                        <small><i class="fas fa-heart text-danger"></i> ${post.likes} likes | <i class="fas fa-calendar"></i> ${post.fecha}</small>
+                    `;
+                    list.appendChild(item);
+                });
+                resultsDiv.appendChild(list);
+            } else {
+                resultsDiv.innerHTML = '<p class="alert alert-info">No se encontraron resultados para los criterios especificados.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
