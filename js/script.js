@@ -19,11 +19,13 @@ document.addEventListener('DOMContentLoaded',()=>{
         window.addEventListener('load', cargarDatos);
 
         function analizarTendencias(hashtag, minLikes, fechaInicio) {
+            console.log("El post tiene que cumplir TODAS las condiciones para que se muestre en la lista")
             return publicaciones.filter(post => 
                 post.texto.toLowerCase().includes(hashtag.toLowerCase()) &&
                 post.likes >= minLikes &&
                 new Date(post.fecha) >= new Date(fechaInicio)
-            );
+            ); 
+            
         }
 
         document.getElementById('trendForm').addEventListener('submit', function(e) {
